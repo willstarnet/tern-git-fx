@@ -1,0 +1,12 @@
+# The only third-party dependencies with a manifest Dependabot reads are the CI actions. The
+# pinned tools (scripts/setup.sh) and Pillow (inline in tools/build_sprites.py) are bumped by hand:
+# a Pillow bump must come with rebuilt sprites.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: build
+      include: scope

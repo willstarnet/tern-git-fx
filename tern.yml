@@ -1,0 +1,6 @@
+# selene standard library: Luau plus Tern's `tern` global (typed by types/tern.d.luau).
+base: luau
+name: tern
+globals:
+  tern:
+    any: true

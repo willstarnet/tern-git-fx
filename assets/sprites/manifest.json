@@ -1,0 +1,601 @@
+{
+  "schema": 1,
+  "frame_w": 32,
+  "frame_h": 32,
+  "commands": {
+    "commit": {
+      "loop": {
+        "sheet": "commit-loop.png",
+        "durations_ms": [
+          150,
+          150,
+          150,
+          150,
+          150,
+          150
+        ]
+      },
+      "success": {
+        "sheet": "commit-success.png",
+        "durations_ms": [
+          120,
+          90,
+          70,
+          80,
+          70,
+          90,
+          90,
+          90,
+          110,
+          120,
+          110,
+          400
+        ]
+      },
+      "fail": {
+        "sheet": "commit-fail.png",
+        "durations_ms": [
+          120,
+          90,
+          90,
+          110,
+          70,
+          120,
+          90,
+          110,
+          110,
+          110,
+          400
+        ]
+      }
+    },
+    "push": {
+      "loop": {
+        "sheet": "push-loop.png",
+        "durations_ms": [
+          110,
+          110,
+          110,
+          110,
+          110,
+          110
+        ]
+      },
+      "success": {
+        "sheet": "push-success.png",
+        "durations_ms": [
+          110,
+          110,
+          90,
+          90,
+          90,
+          90,
+          90,
+          90,
+          100,
+          100,
+          100,
+          400
+        ]
+      },
+      "fail": {
+        "sheet": "push-fail.png",
+        "durations_ms": [
+          110,
+          110,
+          110,
+          110,
+          110,
+          110,
+          130,
+          130,
+          90,
+          90,
+          110,
+          110,
+          110,
+          400
+        ]
+      }
+    },
+    "pull": {
+      "loop": {
+        "sheet": "pull-loop.png",
+        "durations_ms": [
+          160,
+          160,
+          160,
+          160,
+          160,
+          160
+        ]
+      },
+      "success": {
+        "sheet": "pull-success.png",
+        "durations_ms": [
+          130,
+          130,
+          130,
+          110,
+          130,
+          130,
+          100,
+          100,
+          100,
+          400
+        ]
+      },
+      "fail": {
+        "sheet": "pull-fail.png",
+        "durations_ms": [
+          150,
+          170,
+          110,
+          80,
+          80,
+          120,
+          130,
+          110,
+          110,
+          110,
+          400
+        ]
+      }
+    },
+    "fetch": {
+      "loop": {
+        "sheet": "fetch-loop.png",
+        "durations_ms": [
+          120,
+          120,
+          120,
+          120
+        ]
+      },
+      "success": {
+        "sheet": "fetch-success.png",
+        "durations_ms": [
+          110,
+          110,
+          120,
+          100,
+          130,
+          130,
+          130,
+          130,
+          130,
+          400
+        ]
+      },
+      "fail": {
+        "sheet": "fetch-fail.png",
+        "durations_ms": [
+          110,
+          110,
+          120,
+          100,
+          160,
+          150,
+          150,
+          150,
+          150,
+          400
+        ]
+      }
+    },
+    "add": {
+      "loop": {
+        "sheet": "add-loop.png",
+        "durations_ms": [
+          170,
+          170,
+          170,
+          170
+        ]
+      },
+      "success": {
+        "sheet": "add-success.png",
+        "durations_ms": [
+          110,
+          60,
+          60,
+          90,
+          80,
+          80,
+          100,
+          110,
+          110,
+          400
+        ]
+      },
+      "fail": {
+        "sheet": "add-fail.png",
+        "durations_ms": [
+          110,
+          70,
+          60,
+          80,
+          80,
+          80,
+          70,
+          70,
+          110,
+          110,
+          110,
+          400
+        ]
+      }
+    },
+    "restore": {
+      "loop": {
+        "sheet": "restore-loop.png",
+        "durations_ms": [
+          120,
+          120,
+          120,
+          120,
+          120,
+          120,
+          120,
+          120
+        ]
+      },
+      "success": {
+        "sheet": "restore-success.png",
+        "durations_ms": [
+          80,
+          80,
+          60,
+          60,
+          90,
+          110,
+          70,
+          110,
+          110,
+          400
+        ]
+      },
+      "fail": {
+        "sheet": "restore-fail.png",
+        "durations_ms": [
+          120,
+          180,
+          240,
+          110,
+          110,
+          140,
+          100,
+          70,
+          70,
+          90,
+          110,
+          110,
+          400
+        ]
+      }
+    },
+    "init": {
+      "loop": {
+        "sheet": "init-loop.png",
+        "durations_ms": [
+          120,
+          120,
+          120,
+          120,
+          120,
+          120
+        ]
+      },
+      "success": {
+        "sheet": "init-success.png",
+        "durations_ms": [
+          120,
+          120,
+          180,
+          140,
+          140,
+          100,
+          100,
+          100,
+          100,
+          400
+        ]
+      },
+      "fail": {
+        "sheet": "init-fail.png",
+        "durations_ms": [
+          120,
+          160,
+          130,
+          240,
+          200,
+          220,
+          120,
+          120,
+          120,
+          400
+        ]
+      }
+    },
+    "clone": {
+      "loop": {
+        "sheet": "clone-loop.png",
+        "durations_ms": [
+          110,
+          110,
+          110,
+          110,
+          110,
+          110,
+          110,
+          110
+        ]
+      },
+      "success": {
+        "sheet": "clone-success.png",
+        "durations_ms": [
+          120,
+          110,
+          130,
+          130,
+          130,
+          90,
+          110,
+          110,
+          110,
+          110,
+          400
+        ]
+      },
+      "fail": {
+        "sheet": "clone-fail.png",
+        "durations_ms": [
+          120,
+          110,
+          130,
+          130,
+          110,
+          110,
+          100,
+          130,
+          130,
+          130,
+          400
+        ]
+      }
+    },
+    "branch": {
+      "loop": {
+        "sheet": "branch-loop.png",
+        "durations_ms": [
+          150,
+          150,
+          150,
+          150,
+          150,
+          150,
+          150,
+          150
+        ]
+      },
+      "success": {
+        "sheet": "branch-success.png",
+        "durations_ms": [
+          120,
+          110,
+          110,
+          120,
+          140,
+          100,
+          100,
+          100,
+          100,
+          100,
+          400
+        ]
+      },
+      "fail": {
+        "sheet": "branch-fail.png",
+        "durations_ms": [
+          120,
+          110,
+          140,
+          160,
+          140,
+          120,
+          90,
+          120,
+          120,
+          120,
+          400
+        ]
+      }
+    },
+    "checkout": {
+      "loop": {
+        "sheet": "checkout-loop.png",
+        "durations_ms": [
+          100,
+          100,
+          100,
+          100
+        ]
+      },
+      "success": {
+        "sheet": "checkout-success.png",
+        "durations_ms": [
+          90,
+          140,
+          120,
+          100,
+          100,
+          140,
+          100,
+          100,
+          100,
+          400
+        ]
+      },
+      "fail": {
+        "sheet": "checkout-fail.png",
+        "durations_ms": [
+          100,
+          100,
+          100,
+          130,
+          100,
+          120,
+          140,
+          110,
+          110,
+          110,
+          400
+        ]
+      }
+    },
+    "stash": {
+      "loop": {
+        "sheet": "stash-loop.png",
+        "durations_ms": [
+          120,
+          120,
+          120,
+          120,
+          120,
+          120
+        ]
+      },
+      "success": {
+        "sheet": "stash-success.png",
+        "durations_ms": [
+          160,
+          180,
+          90,
+          90,
+          90,
+          110,
+          110,
+          110,
+          110,
+          110,
+          110,
+          400
+        ]
+      },
+      "fail": {
+        "sheet": "stash-fail.png",
+        "durations_ms": [
+          160,
+          160,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          220,
+          120,
+          120,
+          400
+        ]
+      }
+    },
+    "blame": {
+      "loop": {
+        "sheet": "blame-loop.png",
+        "durations_ms": [
+          130,
+          130,
+          130,
+          130,
+          130,
+          130,
+          130,
+          130
+        ]
+      },
+      "success": {
+        "sheet": "blame-success.png",
+        "durations_ms": [
+          90,
+          90,
+          110,
+          160,
+          120,
+          120,
+          110,
+          110,
+          400
+        ]
+      },
+      "fail": {
+        "sheet": "blame-fail.png",
+        "durations_ms": [
+          120,
+          110,
+          100,
+          90,
+          160,
+          150,
+          150,
+          120,
+          120,
+          400
+        ]
+      }
+    },
+    "reset": {
+      "loop": {
+        "sheet": "reset-loop.png",
+        "durations_ms": [
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80,
+          80
+        ]
+      },
+      "success": {
+        "sheet": "reset-success.png",
+        "durations_ms": [
+          70,
+          80,
+          100,
+          120,
+          150,
+          90,
+          90,
+          90,
+          110,
+          110,
+          400
+        ]
+      },
+      "fail": {
+        "sheet": "reset-fail.png",
+        "durations_ms": [
+          110,
+          100,
+          90,
+          80,
+          90,
+          90,
+          90,
+          90,
+          90,
+          120,
+          120,
+          400
+        ]
+      }
+    }
+  }
+}

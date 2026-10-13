@@ -1,0 +1,19 @@
+# Pinned tools and generated API types (scripts/setup.sh)
+.tools/
+types/
+
+# Sprite review aids (tools/build_sprites.py) and `tern ctl shot` output
+build/
+target/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# OS and editors
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.tmp

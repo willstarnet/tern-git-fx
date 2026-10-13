@@ -1,0 +1,2 @@
+std = "tern"
+exclude = ["types/*", ".tools/*", "build/*"]

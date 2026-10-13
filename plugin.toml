@@ -1,0 +1,7 @@
+schema = 1
+id = "tern-git-fx"
+name = "Git FX"
+version = "0.1.0"
+description = "Pixel-art animations in the pane corner while git commands run, with a success or failure ending."
+icon = "git-branch"
+window = "window.luau"
