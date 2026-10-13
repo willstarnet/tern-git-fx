@@ -29,7 +29,7 @@ downloads the published SDK's. Re-run it after upgrading Tern.
 | lint | `selene window.luau fx tests` |
 | types | `luau-lsp analyze` of `window.luau` and `fx/` against the Tern types |
 | tests | `lune run tests/run.luau` (add a filter argument to run matching cases only) |
-| sprites | rebuilds the sprites and fails if a committed sheet would change |
+| sprites | `uv run tools/build_sprites.py --check`: fails if a committed sheet's pixels, the manifest or the preview are out of date |
 
 ## Code layout
 

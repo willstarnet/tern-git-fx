@@ -27,20 +27,11 @@ typecheck() {
     window.luau $(find fx -name '*.luau' | sort)
 }
 
-sprites() {
-  uv run tools/build_sprites.py >/dev/null || return 1
-  if ! git diff --quiet -- assets/sprites docs/images/sprites-preview.png; then
-    echo "rebuilding changed committed sprites:"
-    git diff --stat -- assets/sprites docs/images/sprites-preview.png
-    return 1
-  fi
-}
-
 run format stylua --check "${sources[@]}"
 run lint selene --display-style=quiet "${sources[@]}"
 run types typecheck
 run tests lune run tests/run.luau
-run sprites sprites
+run sprites uv run tools/build_sprites.py --check
 
 echo
 if [ "${#failed[@]}" -gt 0 ]; then

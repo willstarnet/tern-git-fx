@@ -2,12 +2,15 @@
 
 Every animation is drawn by Python code in `tools/art/scenes/<command>.py`; nothing is
 hand-painted. `tools/build_sprites.py` turns the scenes into the bundled sheets, so the art can be
-changed, reviewed and rebuilt like any other source. Rebuilding is deterministic for the pinned
-Pillow (`check.sh` fails if a rebuild changes a committed sheet).
+changed, reviewed and rebuilt like any other source. The pixels are deterministic for the pinned
+Pillow; `--check` (run by `check.sh`) fails if a committed sheet's pixels, the manifest or the
+preview are out of date. PNG bytes differ between platforms' zlib builds, so files are compared
+and rewritten by decoded pixels only.
 
 ```sh
 uv run tools/build_sprites.py              # every command: sheets, manifest.json, docs preview
 uv run tools/build_sprites.py push commit  # only these: sheets and build/preview (no manifest)
+uv run tools/build_sprites.py --check      # exit 1 if a committed output is out of date
 ```
 
 Review aids (gitignored): `build/preview/<command>.png`, a 4x contact sheet (rows: loop,

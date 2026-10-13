@@ -6,8 +6,10 @@
 
     uv run tools/build_sprites.py               # every command: sheets, manifest, docs preview
     uv run tools/build_sprites.py push commit   # only these: sheets and build/preview (no manifest)
+    uv run tools/build_sprites.py --check       # exit 1 if a committed output is out of date
 
-Outputs (deterministic for a pinned Pillow):
+Outputs (pixels are deterministic; PNG bytes vary with the platform's zlib, so files are only
+rewritten, and --check only compares, by decoded pixels):
 - assets/sprites/<command>-<phase>.png: one horizontal strip per animation;
 - assets/sprites/manifest.json: frame size and per-animation sheet and frame durations;
 - docs/images/sprites-preview.png: every animation's frames on a light and a dark background.
@@ -121,52 +123,8 @@ def load(command: str) -> dict[str, Anim]:
     return anims
 
 
-def main(argv: list[str]) -> int:
-    only = argv[1:]
-    unknown = [c for c in only if c not in COMMANDS]
-    if unknown:
-        print(f"unknown commands: {unknown}", file=sys.stderr)
-        return 2
-    commands = only or COMMANDS
-    SPRITES.mkdir(parents=True, exist_ok=True)
-    PREVIEW.mkdir(parents=True, exist_ok=True)
-
-    built: dict[str, dict[str, Anim]] = {}
-    errors: list[str] = []
-    for command in commands:
-        anims = load(command)
-        for phase in PHASES:
-            errors += validate(command, phase, anims[phase])
-        built[command] = anims
-    if errors:
-        print("\n".join(errors), file=sys.stderr)
-        return 1
-
-    for command, anims in built.items():
-        for phase in PHASES:
-            strip(anims[phase]).save(SPRITES / f"{command}-{phase}.png", optimize=False)
-            gif(anims[phase], PREVIEW / f"{command}-{phase}.gif", 6, DARK)
-        contact(anims, 4).save(PREVIEW / f"{command}.png")
-        print(f"built {command}: " + ", ".join(f"{p} {len(anims[p].frames)}f/{sum(anims[p].durations_ms)}ms" for p in PHASES))
-
-    if only:
-        return 0
-
-    manifest = {
-        "schema": 1,
-        "frame_w": SIZE,
-        "frame_h": SIZE,
-        "commands": {
-            command: {
-                phase: {"sheet": f"{command}-{phase}.png", "durations_ms": built[command][phase].durations_ms}
-                for phase in PHASES
-            }
-            for command in COMMANDS
-        },
-    }
-    (SPRITES / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
-
-    # docs preview: one row per command and phase, light then dark half, at 2x.
+def preview_sheet(built: dict[str, dict[str, Anim]]) -> Image.Image:
+    """docs preview: one row per command and phase, light then dark half, at 2x."""
     scale = 2
     cell = SIZE * scale
     cols = max(len(built[c][p].frames) for c in COMMANDS for p in PHASES)
@@ -179,9 +137,91 @@ def main(argv: list[str]) -> int:
             for i, f in enumerate(a.frames):
                 band.alpha_composite(f.image().resize((cell, cell), Image.NEAREST), (i * cell, 0))
             sheet.paste(band, (half * (cols * cell + 8), r * cell))
-    (ROOT / "docs" / "images").mkdir(parents=True, exist_ok=True)
-    sheet.save(ROOT / "docs" / "images" / "sprites-preview.png", optimize=False)
-    print(f"wrote manifest for {len(COMMANDS)} commands and docs/images/sprites-preview.png")
+    return sheet
+
+
+def manifest_text(built: dict[str, dict[str, Anim]]) -> str:
+    manifest = {
+        "schema": 1,
+        "frame_w": SIZE,
+        "frame_h": SIZE,
+        "commands": {
+            command: {
+                phase: {"sheet": f"{command}-{phase}.png", "durations_ms": built[command][phase].durations_ms}
+                for phase in PHASES
+            }
+            for command in COMMANDS
+        },
+    }
+    return json.dumps(manifest, indent=2) + "\n"
+
+
+def stale(path: Path, want: Image.Image | str) -> bool:
+    """Whether the committed file differs from `want`: pixels for images (PNG bytes vary with the
+    platform's zlib), exact text otherwise."""
+    if not path.exists():
+        return True
+    if isinstance(want, str):
+        return path.read_text() != want
+    with Image.open(path) as have:
+        have_rgba = have.convert("RGBA")
+        return have_rgba.size != want.size or have_rgba.tobytes() != want.convert("RGBA").tobytes()
+
+
+def main(argv: list[str]) -> int:
+    args = argv[1:]
+    check = "--check" in args
+    only = [a for a in args if a != "--check"]
+    unknown = [c for c in only if c not in COMMANDS]
+    if unknown:
+        print(f"unknown commands: {unknown}", file=sys.stderr)
+        return 2
+    if check and only:
+        print("--check always checks every command", file=sys.stderr)
+        return 2
+    commands = only or COMMANDS
+
+    built: dict[str, dict[str, Anim]] = {}
+    errors: list[str] = []
+    for command in commands:
+        anims = load(command)
+        for phase in PHASES:
+            errors += validate(command, phase, anims[phase])
+        built[command] = anims
+    if errors:
+        print("\n".join(errors), file=sys.stderr)
+        return 1
+
+    outputs: dict[Path, Image.Image | str] = {}
+    for command, anims in built.items():
+        for phase in PHASES:
+            outputs[SPRITES / f"{command}-{phase}.png"] = strip(anims[phase])
+    if not only:
+        outputs[SPRITES / "manifest.json"] = manifest_text(built)
+        outputs[ROOT / "docs" / "images" / "sprites-preview.png"] = preview_sheet(built)
+
+    if check:
+        changed = [str(p.relative_to(ROOT)) for p, want in outputs.items() if stale(p, want)]
+        if changed:
+            print("out of date (run uv run tools/build_sprites.py and commit):", file=sys.stderr)
+            print("\n".join(f"  {c}" for c in changed), file=sys.stderr)
+            return 1
+        print(f"sprites up to date ({len(outputs)} files)")
+        return 0
+
+    PREVIEW.mkdir(parents=True, exist_ok=True)
+    for path, want in outputs.items():
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if isinstance(want, str):
+            path.write_text(want)
+        elif stale(path, want):
+            # Rewrite only real changes, so a rebuild on another platform leaves the files alone.
+            want.save(path, optimize=False)
+    for command, anims in built.items():
+        for phase in PHASES:
+            gif(anims[phase], PREVIEW / f"{command}-{phase}.gif", 6, DARK)
+        contact(anims, 4).save(PREVIEW / f"{command}.png")
+        print(f"built {command}: " + ", ".join(f"{p} {len(anims[p].frames)}f/{sum(anims[p].durations_ms)}ms" for p in PHASES))
     return 0
 
 
